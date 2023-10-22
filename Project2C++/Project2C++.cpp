@@ -10,6 +10,8 @@
 #include <format>
 #include <cmath>
 
+#include <random>
+
 using namespace std;
 
 template <class F>
@@ -117,6 +119,17 @@ std::vector<long long> getLongLong(long long begin, long long count, long step =
     return numbers;
 }
 
+vector<float> getFloats(float begin, long long count, float step = 0.1)
+{
+    vector<float> numbers(count);
+    for (auto& el : numbers)
+    {
+        el = begin;
+        begin += step;
+    }
+    return numbers;
+}
+
 template <class Iterable>
 void print(Iterable&& it)
 {
@@ -129,13 +142,12 @@ void demo1()
 {
     cout << "\n\nDEMO 1" << endl;
     auto numbers = getNumbers(25, -10, -1);
-    int cnt = 1;
-    int min = numbers[0];
+    int min = 0;
     cout << "no policy" << endl;
     timeit(
         [&numbers, &min]()
         {
-            for_each(numbers.begin(), numbers.end(),
+            ranges::for_each(numbers.begin(), numbers.end(),
             [&min](int x)
                 {
                     if (x < min) {
@@ -144,7 +156,7 @@ void demo1()
                 });
         });
     cout << min<<endl;
-
+    min = 0;
     cout << "sequental" << endl;
     timeit(
         [&numbers, &min]()
@@ -158,7 +170,7 @@ void demo1()
                 });
         });
     cout << min << endl;
-
+    min = 0;
     cout << "parallel" << endl;
     timeit(
         [&numbers, &min]()
@@ -172,7 +184,7 @@ void demo1()
                 });
         });
     cout << min << endl;
-
+    min = 0;
 
     cout << "unseq" << endl; // SIMD
     timeit(
@@ -187,7 +199,7 @@ void demo1()
                 });
         });
     cout << min << endl;
-
+    min = 0;
 
     cout << "parallel unseq" << endl;
     timeit(
@@ -208,13 +220,12 @@ void demo2()
 {
     cout << "\n\nDEMO 2" << endl;
     auto numbers = getNumbers(5000, -1000, -2);
-    int cnt = 1;
     int min = numbers[0];
     cout << "no policy" << endl;
     timeit(
         [&numbers, &min]()
         {
-            for_each(numbers.begin(), numbers.end(),
+            ranges::for_each(numbers.begin(), numbers.end(),
             [&min](int x)
                 {
                     if (x < min) {
@@ -237,6 +248,7 @@ void demo2()
                 });
         });
     cout << min << endl;
+    min = 0;
 
     cout << "parallel" << endl;
     timeit(
@@ -251,7 +263,7 @@ void demo2()
                 });
         });
     cout << min << endl;
-
+    min = 0;
 
     cout << "unseq" << endl; // SIMD
     timeit(
@@ -266,7 +278,7 @@ void demo2()
                 });
         });
     cout << min << endl;
-
+    min = 0;
 
     cout << "parallel unseq" << endl;
     timeit(
@@ -287,13 +299,12 @@ void demo3()
 {
     cout << "\n\nDEMO 3" << endl;
     auto numbers = getNumbers(50000000, 0, -1);
-    int cnt = 1;
     int min = numbers[0];
     cout << "no policy" << endl;
     timeit(
         [&numbers, &min]()
         {
-            for_each(numbers.begin(), numbers.end(),
+            ranges::for_each(numbers.begin(), numbers.end(),
             [&min](int x)
                 {
                     if (x < min) {
@@ -302,7 +313,7 @@ void demo3()
                 });
         });
     cout << min << endl;
-
+    min = numbers[0];
     cout << "sequental" << endl;
     timeit(
         [&numbers, &min]()
@@ -316,6 +327,7 @@ void demo3()
                 });
         });
     cout << min << endl;
+    min = numbers[0];
 
     cout << "parallel" << endl;
     timeit(
@@ -330,7 +342,7 @@ void demo3()
                 });
         });
     cout << min << endl;
-
+    min = numbers[0];
 
     cout << "unseq" << endl; // SIMD
     timeit(
@@ -345,7 +357,7 @@ void demo3()
                 });
         });
     cout << min << endl;
-
+    min = numbers[0];
 
     cout << "parallel unseq" << endl;
     timeit(
@@ -362,12 +374,11 @@ void demo3()
     cout << min << endl;
 }
 
-void demo4()
+void demo4()//не правильно
 {
     cout << "\n\nDEMO 4" << endl;
-    auto numbers = getLongLong(50000000000, 10, -1);
-    int cnt = 1;
-    long long min = numbers[0];
+    auto numbers = getLongLong(50000000000, 100, -1);
+    long long min = numbers[0]; // Ініціалізуємо min числом типу long long
     cout << "no policy" << endl;
     timeit(
         [&numbers, &min]()
@@ -375,12 +386,13 @@ void demo4()
             for_each(numbers.begin(), numbers.end(),
             [&min](long long x)
                 {
-                    if (x < min) {
-                        min = x;
+                    if (static_cast<long long>(x) < min) {
+                        min = static_cast<long long>(x);
                     }
                 });
         });
     cout << min << endl;
+    min = numbers[0];
 
     cout << "sequental" << endl;
     timeit(
@@ -389,12 +401,13 @@ void demo4()
             for_each(execution::seq, numbers.begin(), numbers.end(),
             [&min](long long x)
                 {
-                    if (x < min) {
-                        min = x;
+                    if (static_cast<long long>(x) < min) {
+                        min = static_cast<long long>(x);
                     }
                 });
         });
     cout << min << endl;
+    min = numbers[0];
 
     cout << "parallel" << endl;
     timeit(
@@ -403,13 +416,13 @@ void demo4()
             for_each(execution::par, numbers.begin(), numbers.end(),
             [&min](long long x)
                 {
-                    if (x < min) {
-                        min = x;
+                    if (static_cast<long long>(x) < min) {
+                        min = static_cast<long long>(x);
                     }
                 });
         });
     cout << min << endl;
-
+    min = numbers[0];
 
     cout << "unseq" << endl; // SIMD
     timeit(
@@ -418,13 +431,13 @@ void demo4()
             for_each(execution::unseq, numbers.begin(), numbers.end(),
             [&min](long long x)
                 {
-                    if (x < min) {
-                        min = x;
+                    if (static_cast<long long>(x) < min) {
+                        min = static_cast<long long>(x);
                     }
                 });
         });
     cout << min << endl;
-
+    min = numbers[0];
 
     cout << "parallel unseq" << endl;
     timeit(
@@ -433,12 +446,180 @@ void demo4()
             for_each(execution::par_unseq, numbers.begin(), numbers.end(),
             [&min](long long x)
                 {
+                    if (static_cast<long long>(x) < min) {
+                        min = static_cast<long long>(x);
+                    }
+                });
+        });
+    cout << min << endl;
+}
+
+
+void demo5()//не правильно
+{
+    cout << "\n\nDEMO 5" << endl;
+    auto numbers = getFloats(12345.45f, 3, -1);
+    float min = numbers[0];
+    cout << "no policy" << endl;
+    timeit(
+        [&numbers, &min]()
+        {
+            ranges::for_each(numbers.begin(), numbers.end(),
+            [&min](float x)
+                {
                     if (x < min) {
                         min = x;
                     }
                 });
         });
     cout << min << endl;
+    min = numbers[0];
+
+    cout << "sequental" << endl;
+    timeit(
+        [&numbers, &min]()
+        {
+            for_each(execution::seq, numbers.begin(), numbers.end(),
+            [&min](float x)
+                {
+                    if (x < min) {
+                        min = x;
+                    }
+                });
+        });
+    cout << min << endl;
+    min = numbers[0];
+
+    cout << "parallel" << endl;
+    timeit(
+        [&numbers, &min]()
+        {
+            for_each(execution::par, numbers.begin(), numbers.end(),
+            [&min](float x)
+                {
+                    if (x < min) {
+                        min = x;
+                    }
+                });
+        });
+    cout << min << endl;
+    min = numbers[0];
+
+    cout << "unseq" << endl; // SIMD
+    timeit(
+        [&numbers, &min]()
+        {
+            for_each(execution::unseq, numbers.begin(), numbers.end(),
+            [&min](float x)
+                {
+                    if (x < min) {
+                        min = x;
+                    }
+                });
+        });
+    cout << min << endl;
+    min = numbers[0];
+
+    cout << "parallel unseq" << endl;
+    timeit(
+        [&numbers, &min]()
+        {
+            for_each(execution::par_unseq, numbers.begin(), numbers.end(),
+            [&min](float x)
+                {
+                    if (x < min) {
+                        min = x;
+                    }
+                });
+        });
+    cout << min << endl;
+}
+
+template <typename Iterator, typename T>
+struct min_block
+{
+    void operator()(Iterator first, Iterator last, T& result)
+    {
+        result = *min_element(first, last);
+    }
+};
+
+template <typename Iterator, typename T>
+T parallel_min(Iterator first, Iterator last, T init)
+{
+    unsigned long const length = std::distance(first, last);
+    if (!length)
+        return init;
+    unsigned long const min_per_thread = 25;
+    unsigned long const max_threads = (length + min_per_thread - 1) / min_per_thread;
+    unsigned long const hardware_threads = std::thread::hardware_concurrency();
+    unsigned long const num_threads = std::min(hardware_threads != 0 ? hardware_threads : 2, max_threads);
+    unsigned long const block_size = length / num_threads;
+    vector<T> results(num_threads, init);
+    vector<thread> threads(num_threads - 1);
+    Iterator block_start = first;
+
+    for (unsigned long i = 0; i < (num_threads - 1); ++i)
+    {
+        Iterator block_end = block_start;
+        advance(block_end, block_size);
+
+        threads[i] = thread([block_start, block_end, &results, i]() {
+            min_block<Iterator, T>()(block_start, block_end, results[i]);
+            });
+
+        block_start = block_end;
+    }
+
+    min_block<Iterator, T>()(block_start, last, results[num_threads - 1]);
+
+    for (auto& entry : threads)
+        entry.join();
+
+    T final_result = *min_element(results.begin(), results.end());
+    return final_result;
+}
+
+void demo6()
+{
+    const int num_samples = 10;
+    std::vector<double> container(100000000LL, 0);
+
+    std::random_device r;
+    std::seed_seq seeds{ r(), r(), r(), r(), r(), r() };
+    std::mt19937 e(seeds);
+    std::uniform_real_distribution<double> d(-10000, 10);
+
+    for (auto& el : container)
+        el = d(e);
+
+    int num_threads = std::thread::hardware_concurrency();
+
+    std::vector<double> min_values;
+
+    std::cout << std::setw(5) << "K" << std::setw(15) << "Min Value" << std::setw(15) << "Execution Time" << std::endl;
+
+    for (int K = 1; K <= num_threads; K++)
+    {
+        std::cout << std::setw(5) << K << ": ";
+
+        double min_value = 0.0;
+        timeit([&]()
+            {
+                min_value = parallel_min(container.cbegin(), container.cend(), std::numeric_limits<double>::max());
+
+            });
+
+
+        min_values.push_back(min_value);
+        std::cout << std::setw(15) << min_value  << std::endl;
+    }
+    double global_min = *std::min_element(min_values.begin(), min_values.end());
+
+    std::cout << "Global Min: " << global_min << std::endl;
+
+    double ratio = static_cast<double>(global_min) / num_threads;
+    std::cout << "K / Num Threads Ratio: " << ratio << std::endl;
 }
 
 
@@ -450,4 +631,6 @@ int main()
     demo2();
     demo3();
     demo4();
+    demo5();
+    demo6();
 }
