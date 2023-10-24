@@ -141,7 +141,7 @@ void print(Iterable&& it)
 
 void demo1()
 {
-    auto numbers = getNumbers(25, -10, -1);
+    auto numbers = getNumbers(1000, 0, -1);
     cout << "\n\nDEMO 1: int, " << numbers.size() << " numbers" << endl;
     int min = 0;
     cout << "No policy: ";
@@ -220,7 +220,7 @@ void demo1()
 
 void demo2()
 {
-    auto numbers = getNumbers(5000, -1000, -2);
+    auto numbers = getNumbers(100000, 0, -1);
     cout << "\n\nDEMO 2: int, " << numbers.size() << " numbers" << endl;
     int min = numbers[0];
     cout << "No policy: ";
@@ -300,7 +300,7 @@ void demo2()
 
 void demo3()
 {
-    auto numbers = getNumbers(50000000, 0, -1);
+    auto numbers = getNumbers(100000000, 0, -1);
     cout << "\n\nDEMO 3: int, " << numbers.size() << " numbers" << endl;
     int min = numbers[0];
     cout << "No policy: ";
@@ -380,7 +380,7 @@ void demo3()
 
 void demo4()
 {
-    auto numbers = getLongLong(50000000000, 100, -1);
+    auto numbers = getLongLong(100000000000, 1000000, -1);
     cout << "\n\nDEMO 4: long long, " << numbers.size() << " numbers" << endl;
     long long min = numbers[0]; 
     cout << "No policy: ";
@@ -462,7 +462,7 @@ void demo4()
 
 void demo5()
 {
-    auto numbers = getFloats(12345.45f, 3, -1);
+    auto numbers = getFloats(12345678.5f, 1000000, -0.1f);
     cout << "\n\nDEMO 5: float, " << numbers.size() << " numbers" << endl;
     float min = numbers[0];
     cout << "No policy: ";
@@ -619,7 +619,7 @@ void demo6()
         std::cout << "Min Value: " << min_value  << std::endl;
     }
     double global_min = *std::min_element(min_values.begin(), min_values.end());
-    
+
     std::cout << endl;
     std::cout << "Global Min: " << global_min << std::endl;
 
