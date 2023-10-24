@@ -2,15 +2,12 @@
 #include <vector>
 #include <functional>
 #include <thread>
-
 #include <execution>
 #include <algorithm>
 #include <numeric>
-
 #include <chrono>
 #include <format>
 #include <cmath>
-
 #include <random>
 
 using namespace std;
@@ -22,8 +19,8 @@ void timeit(F&& f)
     f();
     auto time2 = chrono::system_clock::now();
     auto tdiff = time2 - time1;
-        cout << format("{:%S}", tdiff);
-        cout << " ms" << endl;
+    cout << format("{:%S}", tdiff);
+    cout << " ms" << endl;
 }
 
 template <class F>
@@ -34,15 +31,14 @@ void timeit(F&& f, int repeat)
         f();
     auto time2 = chrono::system_clock::now();
     auto tdiff = time2 - time1;
-        cout << format("{:%S}", tdiff);
-        cout << " sec" << endl;
+    cout << format("{:%S}", tdiff);
+    cout << " sec" << endl;
 }
-
 
 template <typename ExecutionPolicy, typename T>
 T minimum(ExecutionPolicy policy, T begin, T end, long long n)
 {
-    std::vector<T> numbers;
+    vector<T> numbers;
     double step = static_cast<double>(end - begin) / static_cast<double>(n - 1);
 
     for (int i = 0; i < n; i++) {
@@ -64,11 +60,10 @@ T minimum(ExecutionPolicy policy, T begin, T end, long long n)
     return min;
 }
 
-
 template <typename T>
 T minimum_nopolicy(T begin, T end, long long n)
 {
-    std::vector<T> numbers;
+    vector<T> numbers;
     double step = static_cast<double>(end - begin) / static_cast<double>(n - 1);
 
     for (int i = 0; i < n; i++) {
@@ -97,37 +92,47 @@ vector<int> getNumbers(int begin, int end, int inc = 1)
         for (int i = begin; i < end; i += inc)
         {
             numbers.push_back(i);
-           // cout << i << " ";
         }
     else
         for (int i = begin; i > end; i += inc)
         {
             numbers.push_back(i);
-           // cout << i << " ";
         }
 
     return numbers;
 }
 
-std::vector<long long> getLongLong(long long begin, long long count, long step = 1)
+vector<long long> getNumbersLL(long long begin, long long end, long long inc = 1)
 {
-    std::vector<long long> numbers(count);
-    for (auto& el : numbers)
-    {
-        el = begin;
-        begin += step;
-    }
+    vector<long long> numbers;
+    if (inc > 0)
+        for (long long i = begin; i < end; i += inc)
+        {
+            numbers.push_back(i);
+        }
+    else
+        for (long long i = begin; i > end; i += inc)
+        {
+            numbers.push_back(i);
+        }
+
     return numbers;
 }
 
-vector<float> getFloats(float begin, long long count, float step = 0.1)
+vector<float> getNumbersFloat(float begin, float end, float inc = 1.0f)
 {
-    vector<float> numbers(count);
-    for (auto& el : numbers)
-    {
-        el = begin;
-        begin += step;
-    }
+    vector<float> numbers;
+    if (inc > 0.0f)
+        for (float i = begin; i < end; i += inc)
+        {
+            numbers.push_back(i);
+        }
+    else
+        for (float i = begin; i > end; i += inc)
+        {
+            numbers.push_back(i);
+        }
+
     return numbers;
 }
 
@@ -156,7 +161,7 @@ void demo1()
                     }
                 });
         });
-    cout << "Min: " << min << endl;
+
     min = 0;
     cout << "Sequental: ";
     timeit(
@@ -170,7 +175,7 @@ void demo1()
                     }
                 });
         });
-    cout << "Min: " << min << endl;
+
     min = 0;
     cout << "Parallel: ";
     timeit(
@@ -184,7 +189,7 @@ void demo1()
                     }
                 });
         });
-    cout << "Min: " << min << endl;
+
     min = 0;
 
     cout << "Unseq: ";
@@ -199,7 +204,7 @@ void demo1()
                     }
                 });
         });
-    cout << "Min: " << min << endl;
+
     min = 0;
 
     cout << "Parallel unseq: ";
@@ -214,13 +219,13 @@ void demo1()
                     }
                 });
         });
-    cout << "Min: " << min << endl;
-    std::cout << std::endl;
+
+    cout << endl;
 }
 
 void demo2()
 {
-    auto numbers = getNumbers(100000, 0, -1);
+    auto numbers = getNumbers(10000, 0, -1);
     cout << "\n\nDEMO 2: int, " << numbers.size() << " numbers" << endl;
     int min = numbers[0];
     cout << "No policy: ";
@@ -235,7 +240,6 @@ void demo2()
                     }
                 });
         });
-    cout << "Min: " << min << endl;
 
     cout << "Sequental: ";
     timeit(
@@ -249,7 +253,7 @@ void demo2()
                     }
                 });
         });
-    cout << "Min: " << min << endl;
+
     min = 0;
 
     cout << "Parallel: ";
@@ -264,7 +268,7 @@ void demo2()
                     }
                 });
         });
-    cout << "Min: " << min << endl;
+
     min = 0;
 
     cout << "Unseq: ";
@@ -279,7 +283,7 @@ void demo2()
                     }
                 });
         });
-    cout << "Min: " << min << endl;
+
     min = 0;
 
     cout << "Parallel unseq: ";
@@ -294,13 +298,13 @@ void demo2()
                     }
                 });
         });
-    cout << "Min: " << min << endl;
-    std::cout << std::endl;
+
+    cout << endl;
 }
 
 void demo3()
 {
-    auto numbers = getNumbers(100000000, 0, -1);
+    auto numbers = getNumbers(1000000, 0, -1);
     cout << "\n\nDEMO 3: int, " << numbers.size() << " numbers" << endl;
     int min = numbers[0];
     cout << "No policy: ";
@@ -315,7 +319,7 @@ void demo3()
                     }
                 });
         });
-    cout << "Min: " << min << endl;
+
     min = numbers[0];
     cout << "Sequental: ";
     timeit(
@@ -329,7 +333,7 @@ void demo3()
                     }
                 });
         });
-    cout << "Min: " << min << endl;
+
     min = numbers[0];
 
     cout << "Parallel: ";
@@ -344,7 +348,7 @@ void demo3()
                     }
                 });
         });
-    cout << "Min: " << min << endl;
+
     min = numbers[0];
 
     cout << "Unseq: ";
@@ -359,7 +363,7 @@ void demo3()
                     }
                 });
         });
-    cout << "Min: " << min << endl;
+
     min = numbers[0];
 
     cout << "Parallel unseq: ";
@@ -374,171 +378,142 @@ void demo3()
                     }
                 });
         });
-    cout << "Min: " << min << endl;
-    std::cout << std::endl;
+
+    cout << endl;
 }
 
 void demo4()
 {
-    auto numbers = getLongLong(100000000000, 1000000, -1);
-    cout << "\n\nDEMO 4: long long, " << numbers.size() << " numbers" << endl;
-    long long min = numbers[0]; 
+    vector<long long> numbers = getNumbersLL(1000000LL, 0LL, -1LL);
+    cout << "\n\nDEMO 4: long long " << numbers.size() << " numbers" << endl;
+    long long min = 0LL;
+
     cout << "No policy: ";
-    timeit(
-        [&numbers, &min]()
-        {
-            for_each(numbers.begin(), numbers.end(),
-            [&min](long long x)
-                {
-                    if (static_cast<long long>(x) < min) {
-                        min = static_cast<long long>(x);
-                    }
-                });
+    timeit([&numbers, &min]() {
+        ranges::for_each(numbers.begin(), numbers.end(),
+        [&min](long long x) {
+            if (x < min) {
+                min = x;
+            }
         });
-    cout << "Min: " << min << endl;
-    min = numbers[0];
+    });
+
+    min = 0LL;
 
     cout << "Sequental: ";
-    timeit(
-        [&numbers, &min]()
-        {
-            for_each(execution::seq, numbers.begin(), numbers.end(),
-            [&min](long long x)
-                {
-                    if (static_cast<long long>(x) < min) {
-                        min = static_cast<long long>(x);
-                    }
-                });
+    timeit([&numbers, &min]() {
+        for_each(execution::seq, numbers.begin(), numbers.end(),
+        [&min](long long x) {
+            if (x < min) {
+                min = x;
+            }
         });
-    cout << "Min: " << min << endl;
-    min = numbers[0];
+    });
+
+    min = 0LL;
 
     cout << "Parallel: ";
-    timeit(
-        [&numbers, &min]()
-        {
-            for_each(execution::par, numbers.begin(), numbers.end(),
-            [&min](long long x)
-                {
-                    if (static_cast<long long>(x) < min) {
-                        min = static_cast<long long>(x);
-                    }
-                });
+    timeit([&numbers, &min]() {
+        for_each(execution::par, numbers.begin(), numbers.end(),
+        [&min](long long x) {
+            if (x < min) {
+                min = x;
+            }
         });
-    cout << "Min: " << min << endl;
-    min = numbers[0];
+    });
+
+    min = 0LL;
 
     cout << "Unseq: ";
-    timeit(
-        [&numbers, &min]()
-        {
-            for_each(execution::unseq, numbers.begin(), numbers.end(),
-            [&min](long long x)
-                {
-                    if (static_cast<long long>(x) < min) {
-                        min = static_cast<long long>(x);
-                    }
-                });
+    timeit([&numbers, &min]() {
+        for_each(execution::unseq, numbers.begin(), numbers.end(),
+        [&min](long long x) {
+            if (x < min) {
+                min = x;
+            }
         });
-    cout << "Min: " << min << endl;
-    min = numbers[0];
+    });
+
+    min = 0LL;
 
     cout << "Parallel unseq: ";
-    timeit(
-        [&numbers, &min]()
-        {
-            for_each(execution::par_unseq, numbers.begin(), numbers.end(),
-            [&min](long long x)
-                {
-                    if (static_cast<long long>(x) < min) {
-                        min = static_cast<long long>(x);
-                    }
-                });
+    timeit([&numbers, &min]() {
+        for_each(execution::par_unseq, numbers.begin(), numbers.end(),
+        [&min](long long x) {
+            if (x < min) {
+                min = x;
+            }
         });
-    cout << "Min: " << min << endl;
-    std::cout << std::endl;
-}
+    });
 
+    cout << endl;
+}
 
 void demo5()
 {
-    auto numbers = getFloats(12345678.5f, 1000000, -0.1f);
-    cout << "\n\nDEMO 5: float, " << numbers.size() << " numbers" << endl;
-    float min = numbers[0];
+    vector<float> numbers = getNumbersFloat(100000.0f, 0.0f, -1.0f);
+    cout << "\n\nDEMO 5: float " << numbers.size() << " numbers" << endl;
+    float min = 0.0f;
+
     cout << "No policy: ";
-    timeit(
-        [&numbers, &min]()
-        {
-            ranges::for_each(numbers.begin(), numbers.end(),
-            [&min](float x)
-                {
-                    if (x < min) {
-                        min = x;
-                    }
-                });
+    timeit([&numbers, &min]() {
+        ranges::for_each(numbers.begin(), numbers.end(),
+        [&min](float x) {
+            if (x < min) {
+                min = x;
+            }
         });
-    cout << "Min: " << min << endl;
-    min = numbers[0];
+    });
+
+    min = 0.0f;
 
     cout << "Sequental: ";
-    timeit(
-        [&numbers, &min]()
-        {
-            for_each(execution::seq, numbers.begin(), numbers.end(),
-            [&min](float x)
-                {
-                    if (x < min) {
-                        min = x;
-                    }
-                });
+    timeit([&numbers, &min]() {
+        for_each(execution::seq, numbers.begin(), numbers.end(),
+        [&min](float x) {
+            if (x < min) {
+                min = x;
+            }
         });
-    cout << "Min: " << min << endl;
-    min = numbers[0];
+    });
+
+    min = 0.0f;
 
     cout << "Parallel: ";
-    timeit(
-        [&numbers, &min]()
-        {
-            for_each(execution::par, numbers.begin(), numbers.end(),
-            [&min](float x)
-                {
-                    if (x < min) {
-                        min = x;
-                    }
-                });
+    timeit([&numbers, &min]() {
+        for_each(execution::par, numbers.begin(), numbers.end(),
+        [&min](float x) {
+            if (x < min) {
+                min = x;
+            }
         });
-    cout << "Min: " << min << endl;
-    min = numbers[0];
+    });
+
+    min = 0.0f;
 
     cout << "Unseq: ";
-    timeit(
-        [&numbers, &min]()
-        {
-            for_each(execution::unseq, numbers.begin(), numbers.end(),
-            [&min](float x)
-                {
-                    if (x < min) {
-                        min = x;
-                    }
-                });
+    timeit([&numbers, &min]() {
+        for_each(execution::unseq, numbers.begin(), numbers.end(),
+        [&min](float x) {
+            if (x < min) {
+                min = x;
+            }
         });
-    cout << "Min: " << min << endl;
-    min = numbers[0];
+    });
+
+    min = 0.0f;
 
     cout << "Parallel unseq: ";
-    timeit(
-        [&numbers, &min]()
-        {
-            for_each(execution::par_unseq, numbers.begin(), numbers.end(),
-            [&min](float x)
-                {
-                    if (x < min) {
-                        min = x;
-                    }
-                });
+    timeit([&numbers, &min]() {
+        for_each(execution::par_unseq, numbers.begin(), numbers.end(),
+        [&min](float x) {
+            if (x < min) {
+                min = x;
+            }
         });
-    cout << "Min: " << min << endl;
-    std::cout << std::endl;
+    });
+
+    cout << endl;
 }
 
 template <typename Iterator, typename T>
@@ -553,13 +528,13 @@ struct min_block
 template <typename Iterator, typename T>
 T parallel_min(Iterator first, Iterator last, T init)
 {
-    unsigned long const length = std::distance(first, last);
+    unsigned long const length = distance(first, last);
     if (!length)
         return init;
     unsigned long const min_per_thread = 25;
     unsigned long const max_threads = (length + min_per_thread - 1) / min_per_thread;
-    unsigned long const hardware_threads = std::thread::hardware_concurrency();
-    unsigned long const num_threads = std::min(hardware_threads != 0 ? hardware_threads : 2, max_threads);
+    unsigned long const hardware_threads = thread::hardware_concurrency();
+    unsigned long const num_threads = min(hardware_threads != 0 ? hardware_threads : 2, max_threads);
     unsigned long const block_size = length / num_threads;
     vector<T> results(num_threads, init);
     vector<thread> threads(num_threads - 1);
@@ -588,50 +563,53 @@ T parallel_min(Iterator first, Iterator last, T init)
 
 void demo6()
 {
-    const int num_samples = 10;
-    std::vector<double> container(100000000LL, 0);
+    vector<double> container(100000000LL, 0);
 
-    std::random_device r;
-    std::seed_seq seeds{ r(), r(), r(), r(), r(), r() };
-    std::mt19937 e(seeds);
-    std::uniform_real_distribution<double> d(-10000, 10);
+    random_device r;
+    seed_seq seeds{ r(), r(), r(), r(), r(), r() };
+    mt19937 e(seeds);
+    uniform_real_distribution<double> d(-10000, 10);
 
     for (auto& el : container)
         el = d(e);
 
-    int num_threads = std::thread::hardware_concurrency();
+    int num_threads = thread::hardware_concurrency();
 
-    std::vector<double> min_values;
+    vector<chrono::duration<double>> execution_times;
 
     for (int K = 1; K <= num_threads; K++)
     {
-        std::cout << "K: "<< K << endl;
-        std::cout << "Executions Time: ";
+        cout << "K: " << K << endl;
+        auto time1 = chrono::system_clock::now();
+        cout << "Executions Time: ";
         double min_value = 0.0;
         timeit([&]()
             {
-                min_value = parallel_min(container.cbegin(), container.cend(), std::numeric_limits<double>::max());
-
+                // min_value = parallel_min(container.cbegin(), container.cend(), numeric_limits<double>::max());
+                parallel_min(container.cbegin(), container.cend(), numeric_limits<double>::max());
             });
 
+        auto time2 = chrono::system_clock::now();
+        auto tdiff = time2 - time1;
 
-        min_values.push_back(min_value);
-        std::cout << "Min Value: " << min_value  << std::endl;
+        execution_times.push_back(chrono::duration_cast<chrono::duration<double>>(tdiff));
     }
-    double global_min = *std::min_element(min_values.begin(), min_values.end());
 
-    std::cout << endl;
-    std::cout << "Global Min: " << global_min << std::endl;
+    int best_K = 1;
+    double min_execution_time = execution_times[0].count();
+    for (int K = 1; K < num_threads; K++) {
+        double execution_time = execution_times[K].count();
+        if (execution_time < min_execution_time) {
+            min_execution_time = execution_time;
+            best_K = K + 1;
+        }
+    }
 
-    double ratio = static_cast<double>(global_min) / num_threads;
-    std::cout << "K / Num Threads Ratio: " << ratio << std::endl;
+    cout << "K with shortest execution time: " << best_K << endl;
 }
-
 
 int main()
 {
-    //demo1a();
-    //demo1b();
     demo1();
     demo2();
     demo3();
